@@ -131,14 +131,15 @@
   import { createEventDispatcher } from "svelte";
   import * as router from "@app/lib/router";
 
+  import * as modal from "@app/App/GlobalModal.svelte";
   import TextInput from "@app/components/TextInput.svelte";
   import { unreachable } from "@app/lib/utils";
+  import SearchResultsModal from "./SearchResultsModal.svelte";
 
   export let wallet: Wallet;
 
   const dispatch = createEventDispatcher<{
     finished: never;
-    search: { query: string; results: ProjectsAndProfiles };
   }>();
 
   let input = "";
@@ -193,9 +194,10 @@
     } else if (searchResult.type === "projectsAndProfiles") {
       // TODO: show some kind of notification about any errors to the user.
       input = "";
-      dispatch("search", {
-        query,
+      modal.toggle(SearchResultsModal, {
+        wallet,
         results: searchResult.projectsAndProfiles,
+        query,
       });
       dispatch("finished");
     } else {

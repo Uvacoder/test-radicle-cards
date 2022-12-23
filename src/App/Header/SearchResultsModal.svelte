@@ -1,18 +1,17 @@
 <script lang="ts" strictEvents>
-  import Modal from "@app/components/Modal.svelte";
-  import { formatRadicleId, getSeedEmoji, twemoji } from "@app/lib/utils";
   import type { Wallet } from "@app/lib/wallet";
+  import type { ProjectsAndProfiles } from "./Search.svelte";
+
   import Address from "@app/components/Address.svelte";
   import Button from "@app/components/Button.svelte";
-  import { createEventDispatcher } from "svelte";
-  import type { ProjectsAndProfiles } from "./Search.svelte";
   import Link from "@app/components/Link.svelte";
+  import Modal from "@app/components/Modal.svelte";
+  import { formatRadicleId, getSeedEmoji, twemoji } from "@app/lib/utils";
+  import { hide as hideModal } from "@app/App/GlobalModal.svelte";
 
   export let query: string;
   export let results: ProjectsAndProfiles;
   export let wallet: Wallet;
-
-  const dispatch = createEventDispatcher<{ close: never }>();
 </script>
 
 <style>
@@ -31,9 +30,7 @@
   }
 </style>
 
-<svelte:window on:click={() => dispatch("close")} />
-
-<Modal center floating>
+<Modal center>
   <span slot="title" use:twemoji>️🔍</span>
   <span slot="subtitle">
     <p class="txt-highlight txt-medium">
@@ -82,8 +79,6 @@
     {/if}
   </span>
   <span slot="actions">
-    <Button variant="foreground" on:click={() => dispatch("close")}>
-      Close
-    </Button>
+    <Button variant="foreground" on:click={hideModal}>Close</Button>
   </span>
 </Modal>

@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { Wallet } from "@app/lib/wallet";
-  import type { ProjectsAndProfiles } from "./Header/Search.svelte";
   import type { Session } from "@app/lib/session";
 
   import Avatar from "@app/components/Avatar.svelte";
@@ -14,7 +13,6 @@
 
   import Logo from "./Header/Logo.svelte";
   import Search from "./Header/Search.svelte";
-  import SearchResults from "./Header/SearchResults.svelte";
 
   import { Profile, ProfileType } from "@app/lib/profile";
   import { closeFocused } from "@app/components/Floating.svelte";
@@ -23,9 +21,6 @@
 
   export let session: Session | null;
   export let wallet: Wallet;
-
-  let query: string;
-  let results: ProjectsAndProfiles | null = null;
 
   let sessionButtonHover = false;
 
@@ -146,11 +141,7 @@
   <div class="left">
     <Link route={{ resource: "home" }}><span class="logo"><Logo /></span></Link>
     <div class="search">
-      <Search
-        {wallet}
-        on:search={e => {
-          ({ query, results } = e.detail);
-        }} />
+      <Search {wallet} />
     </div>
   </div>
 
@@ -235,9 +226,6 @@
                 {wallet}
                 on:finished={() => {
                   closeFocused();
-                }}
-                on:search={e => {
-                  ({ query, results } = e.detail);
                 }} />
             </div>
             <Link
@@ -255,14 +243,4 @@
       </Floating>
     </div>
   </div>
-
-  {#if results}
-    <SearchResults
-      {wallet}
-      {results}
-      {query}
-      on:close={() => {
-        results = null;
-      }} />
-  {/if}
 </header>
