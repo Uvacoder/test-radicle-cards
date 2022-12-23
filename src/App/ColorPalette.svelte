@@ -1,4 +1,6 @@
 <script lang="ts">
+  import filter from "lodash/filter";
+
   function extractCssVariables(variableName: string) {
     return Array.from(document.styleSheets)
       .filter(
@@ -78,7 +80,10 @@
     "--color-tertiary-6",
   ];
 
-  const colors = extractCssVariables("--color");
+  const colors = filter(extractCssVariables("--color"), c => {
+    return !c.startsWith("--color-prettylights-syntax");
+  });
+
   const colorGroups = [
     ...new Set(
       colors.map(color => {
@@ -92,41 +97,7 @@
     ),
   ];
 
-  let show = false;
   let checkers = false;
-
-  const onKeydown = (event: KeyboardEvent) => {
-    if (import.meta.env.PROD) {
-      return;
-    }
-
-    const hasInputTarget =
-      event.target &&
-      ((event.target as HTMLInputElement).type === "text" ||
-        (event.target as HTMLTextAreaElement).type === "textarea");
-
-    if (
-      hasInputTarget ||
-      event.repeat ||
-      event.altKey ||
-      event.metaKey ||
-      event.ctrlKey
-    ) {
-      return false;
-    }
-
-    if (event.key === "d") {
-      show = !show;
-    }
-  };
-
-  function clickOutside(ev: MouseEvent) {
-    if (thisComponent && !thisComponent.contains(ev.target as HTMLDivElement)) {
-      show = !show;
-    }
-  }
-
-  let thisComponent: HTMLDivElement;
 </script>
 
 <style>
@@ -165,30 +136,23 @@
   }
 </style>
 
-<svelte:window on:keydown={onKeydown} on:click={clickOutside} />
-
-{#if show}
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div
-    bind:this={thisComponent}
-    class="container"
-    on:click={() => (checkers = !checkers)}>
-    <div class:checkers>
-      {#each colorGroups as colorGroup}
-        <div>
-          {#each colors.filter(color => {
-            return color.match(`--color-${colorGroup}`);
-          }) as color}
-            <div style="display: inline-flex;">
-              <div
-                class:unused={!usedColors.includes(color)}
-                title={color}
-                class="color"
-                style={`background-color: var(${color});`} />
-            </div>
-          {/each}
-        </div>
-      {/each}
-    </div>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div class="container" on:click={() => (checkers = !checkers)}>
+  <div class:checkers>
+    {#each colorGroups as colorGroup}
+      <div>
+        {#each colors.filter(color => {
+          return color.match(`--color-${colorGroup}`);
+        }) as color}
+          <div style="display: inline-flex;">
+            <div
+              class:unused={!usedColors.includes(color)}
+              title={color}
+              class="color"
+              style={`background-color: var(${color});`} />
+          </div>
+        {/each}
+      </div>
+    {/each}
   </div>
-{/if}
+</div>

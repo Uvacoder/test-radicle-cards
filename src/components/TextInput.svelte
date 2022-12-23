@@ -34,6 +34,11 @@
     if (event.key === "Enter" && valid) {
       dispatch("submit");
     }
+
+    if (event.key === "Escape") {
+      value = "";
+      inputElement?.blur();
+    }
   }
 </script>
 

@@ -6,8 +6,9 @@
   import { initialize, activeRouteStore } from "@app/lib/router";
   import { twemoji, unreachable } from "@app/lib/utils";
 
-  import ColorPalette from "./App/ColorPalette.svelte";
   import Header from "./App/Header.svelte";
+  import GlobalModal from "./App/GlobalModal.svelte";
+  import Hotkeys from "./App/Hotkeys.svelte";
 
   import Loading from "@app/components/Loading.svelte";
   import Modal from "@app/components/Modal.svelte";
@@ -46,16 +47,6 @@
     }
     return wallet;
   });
-
-  function handleKeydown(event: KeyboardEvent) {
-    if (event.key === "Enter") {
-      const elems = document.querySelectorAll<HTMLElement>("button.primary");
-      if (elems.length === 1) {
-        // We only allow this when there's one primary button.
-        elems[0].click();
-      }
-    }
-  }
 </script>
 
 <style>
@@ -78,10 +69,12 @@
   }
 </style>
 
-<svelte:window on:keydown={handleKeydown} />
 <svelte:head>
   <title>Radicle</title>
 </svelte:head>
+
+<GlobalModal />
+<Hotkeys />
 
 <div class="app">
   {#await loadWallet}
@@ -90,7 +83,6 @@
       <Loading center />
     </div>
   {:then wallet}
-    <ColorPalette />
     <Header session={$session} {wallet} />
     <div class="wrapper">
       {#if $activeRouteStore.resource === "home"}
