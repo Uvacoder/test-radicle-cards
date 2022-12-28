@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { Wallet } from "@app/lib/wallet";
   import type { Blob, Project } from "@app/lib/project";
   import { canonicalize, capitalize } from "@app/lib/utils";
   import { formatObjectId } from "@app/lib/cobs";
@@ -9,7 +8,6 @@
 
   export let issue: Issue;
   export let project: Project;
-  export let wallet: Wallet;
 
   // Get an image blob based on a relative path.
   const getImage = async (imagePath: string): Promise<Blob> => {
@@ -126,7 +124,6 @@
       </div>
     </div>
     <Authorship
-      {wallet}
       author={issue.author}
       timestamp={issue.timestamp}
       caption="opened on" />
@@ -134,7 +131,14 @@
   <main>
     <div class="comments">
       {#each issue.discussion as comment}
-        <Comment {comment} {getImage} {wallet} />
+        <Comment {comment} {getImage} />
+        {#if comment.replyTo}
+          <div class="replies">
+            {#each comment.replyTo as reply}
+              <Comment comment={reply} {getImage} />
+            {/each}
+          </div>
+        {/if}
       {/each}
     </div>
     <div class="metadata layout-desktop">

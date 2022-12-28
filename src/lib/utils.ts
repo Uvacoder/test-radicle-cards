@@ -11,7 +11,6 @@ import { parseUnits } from "@ethersproject/units";
 import * as cache from "@app/lib/cache";
 import emojis from "@app/lib/emojis";
 import { ProfileType } from "@app/lib/profile";
-import { assert } from "@app/lib/error";
 import { base } from "@app/lib/router";
 import { config } from "@app/lib/config";
 import { getAddress, getResolver } from "@app/lib/registrar";
@@ -103,8 +102,6 @@ export function formatSeedId(id: string): string {
 }
 
 export function formatRadicleId(id: string): string {
-  assert(isRadicleId(id));
-
   return id.substring(0, 10) + "…" + id.substring(id.length - 6, id.length);
 }
 

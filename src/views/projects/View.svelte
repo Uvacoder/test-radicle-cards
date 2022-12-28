@@ -138,7 +138,7 @@
         {#await issue.Issue.getIssues(project.id, project.seed.addr)}
           <Loading center />
         {:then issues}
-          <Issues state={issueFilter} {wallet} {issues} />
+          <Issues state={issueFilter} {issues} />
         {:catch e}
           <div class="message">
             <Message error>{e.message}</Message>
@@ -148,7 +148,7 @@
         {#await issue.Issue.getIssue(project.id, activeRoute.params.view.params.issue, project.seed.addr)}
           <Loading center />
         {:then issue}
-          <Issue {project} {wallet} {issue} />
+          <Issue {project} {issue} />
         {:catch e}
           <div class="message">
             <Message error>{e.message}</Message>
@@ -158,7 +158,7 @@
         {#await patch.Patch.getPatches(project.id, project.seed.addr)}
           <Loading center />
         {:then patches}
-          <Patches {wallet} state={patchFilter} {patches} />
+          <Patches state={patchFilter} {patches} />
         {:catch e}
           <div class="message">
             <Message error>{e.message}</Message>
@@ -168,7 +168,7 @@
         {#await patch.Patch.getPatch(project.id, activeRoute.params.view.params.patch, project.seed.addr)}
           <Loading center />
         {:then patch}
-          <Patch {project} {wallet} {patch} />
+          <Patch {project} {patch} />
         {:catch e}
           <div class="message">
             <Message error>{e.message}</Message>
