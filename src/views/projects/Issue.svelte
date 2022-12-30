@@ -5,6 +5,7 @@
   import Comment from "@app/components/Comment.svelte";
   import type { Issue } from "@app/lib/issue";
   import Authorship from "@app/components/Authorship.svelte";
+  import Button from "@app/components/Button.svelte";
 
   export let issue: Issue;
   export let project: Project;
@@ -33,6 +34,21 @@
   .comments {
     flex: 1;
   }
+
+  .new-issue-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-end;
+  }
+  .issue-text {
+    width: 100%;
+    height: 10rem;
+    background-color: inherit;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-foreground-4);
+  }
+
   .metadata {
     flex-basis: 18rem;
     margin-left: 1rem;
@@ -156,4 +172,8 @@
       </div>
     </div>
   </main>
+  <div class="new-issue-form">
+    <textarea class="issue-text" placeholder="Leave a comment" />
+    <Button variant="secondary" size="small">New issue</Button>
+  </div>
 </div>
