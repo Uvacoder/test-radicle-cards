@@ -1,11 +1,11 @@
 import type { EnsProfile } from "@app/lib/registrar";
 import type { Wallet } from "@app/lib/wallet";
-import type { marked } from "marked";
 
 import katex from "katex";
 import md5 from "md5";
 import twemojiModule from "twemoji";
 import { BigNumber, ethers } from "ethers";
+import { marked } from "marked";
 import { parseUnits } from "@ethersproject/units";
 
 import * as cache from "@app/lib/cache";
@@ -543,6 +543,55 @@ const katexMarkedExtension = {
     }),
 };
 
+const footnotePrefix = "marked-fn";
+const referencePrefix = "marked-fnref";
+const referenceMatch = /^\[\^([^\]]+)\](?!\()/;
+
+const footnoteReferenceMarkedExtension = {
+  name: "footnote-ref",
+  level: "inline",
+  start: (src: string) => referenceMatch.test(src),
+  tokenizer(src: string) {
+    const match = src.match(referenceMatch);
+    if (match) {
+      return {
+        type: "footnote-ref",
+        raw: match[0],
+        text: match[1].trim(),
+      };
+    }
+  },
+  renderer: (token: marked.Tokens.Generic) => {
+    return `<sup class="footnote-ref" id="${referencePrefix}:${token.text}"><a href="#${footnotePrefix}:${token.text}">${token.raw}</a></sup>`;
+  },
+};
+
+const footnoteMatch = /^\[\^([^\]]+)\]:\s([\S]*)/;
+const footnoteMarkedExtension = {
+  name: "footnote",
+  level: "block",
+  start: (src: string) => footnoteMatch.test(src),
+  tokenizer(src: string, tokens: Array<any>) {
+    console.log(tokens);
+    const match = src.match(footnoteMatch);
+    if (match) {
+      return {
+        type: "footnote",
+        raw: match[0],
+        reference: match[1].trim(),
+        text: match[2].trim(),
+      };
+    }
+  },
+  renderer: (token: marked.Tokens.Generic) => {
+    return `<p class="txt-small" id="${footnotePrefix}:${token.reference}">${
+      token.reference
+    }. ${marked.parseInline(token.text)} <a href="#${referencePrefix}:${
+      token.reference
+    }">↩</a></p>`;
+  },
+};
+
 // Converts self closing anchor tags into empty anchor tags, to avoid erratic wrapping behaviour
 // e.g. <a name="test"/> -> <a name="test"></a>
 const anchorMarkedExtension = {
@@ -589,7 +638,9 @@ export function twemoji(node: HTMLElement) {
 }
 
 export const markdownExtensions = [
-  emojisMarkedExtension,
-  katexMarkedExtension,
   anchorMarkedExtension,
+  emojisMarkedExtension,
+  footnoteMarkedExtension,
+  footnoteReferenceMarkedExtension,
+  katexMarkedExtension,
 ];

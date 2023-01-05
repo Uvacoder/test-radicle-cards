@@ -183,6 +183,10 @@
     font-weight: var(--font-weight-medium);
   }
 
+  .markdown :global(.footnote-ref > a) {
+    border-bottom: none;
+  }
+
   .markdown :global(img) {
     border-style: none;
     max-width: 100%;
