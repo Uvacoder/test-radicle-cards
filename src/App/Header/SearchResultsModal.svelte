@@ -46,6 +46,7 @@
         {#each results.projects as project}
           <li>
             <Link
+              on:click={hideModal}
               route={{
                 resource: "projects",
                 params: {
