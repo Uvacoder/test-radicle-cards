@@ -5,23 +5,40 @@
 
 <style>
   .hotkeys {
-    display: grid;
-    grid-template-columns: 4rem 13rem;
-    gap: 1rem;
-    align-items: center;
+    gap: 3rem;
+    align-items: flex-start;
     justify-content: center;
+    display: flex;
+    color: var(--color-foreground-6);
   }
 
   .key {
-    border: 1px solid var(--color-secondary-4);
-    height: 2rem;
+    border: 1px solid var(--color-secondary-5);
+    box-shadow: inset 0 -4px 0 var(--color-secondary-5);
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: var(--border-radius-small);
+    background-color: var(--color-secondary-1);
+    min-width: 2rem;
+    padding: 0 1rem 4px 1rem;
   }
 
   .description {
     text-align: left;
+  }
+
+  .pair {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .group {
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
   }
 </style>
 
@@ -33,25 +50,41 @@
 
   <svelte:fragment slot="body">
     <div class="hotkeys">
-      <div class="key txt-bold">?</div>
-      <div class="description">Keyboard shortcuts</div>
+      <div class="group">
+        <div class="pair">
+          <div class="key txt-bold">?</div>
+          <div class="description">Shortcuts</div>
+        </div>
 
-      {#if import.meta.env.DEV}
-        <div class="key txt-bold">d</div>
-        <div class="description">Color palette</div>
-      {/if}
+        <div class="pair">
+          <div class="key txt-bold">/</div>
+          <div class="description">Search</div>
+        </div>
 
-      <div class="key txt-bold">/</div>
-      <div class="description">Search</div>
+        <div class="pair">
+          <div class="key txt-bold">tab</div>
+          <div class="description">Navigate</div>
+        </div>
+      </div>
 
-      <div class="key txt-bold">tab</div>
-      <div class="description">Navigate elements</div>
+      <div class="group">
+        <div class="pair">
+          <div class="key txt-bold">enter</div>
+          <div class="description">Submit</div>
+        </div>
 
-      <div class="key txt-bold">enter</div>
-      <div class="description">Submit</div>
+        <div class="pair">
+          <div class="key txt-bold">esc</div>
+          <div class="description">Close</div>
+        </div>
 
-      <div class="key txt-bold">esc</div>
-      <div class="description">Close modal, defocus field</div>
+        {#if import.meta.env.DEV}
+          <div class="pair">
+            <div class="key txt-bold">d</div>
+            <div class="description">Color palette</div>
+          </div>
+        {/if}
+      </div>
     </div>
   </svelte:fragment>
 </Modal>
