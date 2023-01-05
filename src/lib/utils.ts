@@ -562,7 +562,7 @@ const footnoteReferenceMarkedExtension = {
     }
   },
   renderer: (token: marked.Tokens.Generic) => {
-    return `<sup class="footnote-ref" id="${referencePrefix}:${token.text}"><a href="#${footnotePrefix}:${token.text}">${token.raw}</a></sup>`;
+    return `<sup class="footnote-ref" id="${referencePrefix}:${token.text}"><a href="#${footnotePrefix}:${token.text}">[${token.text}]</a></sup>`;
   },
 };
 
