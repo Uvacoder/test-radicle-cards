@@ -1,5 +1,5 @@
 <script lang="ts">
-  import * as modal from "./GlobalModal.svelte";
+  import * as modal from "@app/lib/modal";
 
   import ColorPalette from "./ColorPalette.svelte";
   import HelpModal from "./HelpModal.svelte";

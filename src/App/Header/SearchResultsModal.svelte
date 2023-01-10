@@ -7,7 +7,7 @@
   import Link from "@app/components/Link.svelte";
   import Modal from "@app/components/Modal.svelte";
   import { formatRadicleId, getSeedEmoji, twemoji } from "@app/lib/utils";
-  import { hide as hideModal } from "@app/App/GlobalModal.svelte";
+  import * as modal from "@app/lib/modal";
 
   export let query: string;
   export let results: ProjectsAndProfiles;
@@ -46,7 +46,7 @@
         {#each results.projects as project}
           <li>
             <Link
-              on:click={hideModal}
+              on:click={modal.hide}
               route={{
                 resource: "projects",
                 params: {
@@ -80,6 +80,6 @@
     {/if}
   </span>
   <span slot="actions">
-    <Button variant="foreground" on:click={hideModal}>Close</Button>
+    <Button variant="foreground" on:click={modal.hide}>Close</Button>
   </span>
 </Modal>

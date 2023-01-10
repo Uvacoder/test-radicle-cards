@@ -131,7 +131,7 @@
   import { createEventDispatcher } from "svelte";
   import * as router from "@app/lib/router";
 
-  import * as modal from "@app/App/GlobalModal.svelte";
+  import * as modal from "@app/lib/modal";
   import TextInput from "@app/components/TextInput.svelte";
   import { unreachable } from "@app/lib/utils";
   import SearchResultsModal from "./SearchResultsModal.svelte";
