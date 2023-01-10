@@ -586,7 +586,9 @@ const footnoteMarkedExtension = {
   renderer: (token: marked.Tokens.Generic) => {
     return `<p class="txt-small" id="${footnotePrefix}:${token.reference}">${
       token.reference
-    }. ${marked.parseInline(token.text)} <a href="#${referencePrefix}:${
+    }. ${marked.parseInline(
+      token.text,
+    )} <a class="txt-tiny" href="#${referencePrefix}:${
       token.reference
     }">↩</a></p>`;
   },
@@ -630,6 +632,8 @@ export const renderer = {
 
 export function twemoji(node: HTMLElement) {
   twemojiModule.parse(node, {
+    // This function allows us to filter out twemojis we don't want.
+    callback: icon => (icon === "↩" ? false : true),
     base,
     folder: "twemoji",
     ext: ".svg",

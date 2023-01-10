@@ -185,6 +185,7 @@
 
   .markdown :global(.footnote-ref > a) {
     border-bottom: none;
+    color: unset;
   }
 
   .markdown :global(img) {
