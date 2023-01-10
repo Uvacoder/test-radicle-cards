@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Err } from "@app/lib/error";
   import type { Wallet } from "@app/lib/wallet";
 
   import { get } from "svelte/store";
 
+  import * as modal from "@app/lib/modal";
   import Button from "@app/components/Button.svelte";
   import ConnectWalletModal from "@app/components/Connect/ConnectWalletModal.svelte";
   import ErrorModal from "@app/components/ErrorModal.svelte";
@@ -14,8 +14,6 @@
   export let wallet: Wallet;
   export let buttonVariant: "foreground" | "primary";
 
-  let error: Err | null = null;
-
   const onModalClose = () => {
     const wcs = get(wallet.walletConnect.state);
 
@@ -24,12 +22,16 @@
       wcs.onClose();
     }
   };
+
   const onConnect = async () => {
     try {
       await state.connectWalletConnect(wallet);
-    } catch (e: any) {
-      walletConnectState.set({ state: "close" });
-      error = e;
+    } catch (error: unknown) {
+      modal.show(ErrorModal, {
+        emoji: "👛",
+        title: "Connection failed",
+        error,
+      });
     }
   };
 
@@ -54,11 +56,4 @@
     {wallet}
     uri={$walletConnectState.uri}
     on:close={onModalClose} />
-{:else if error}
-  <ErrorModal
-    floating
-    emoji="👛"
-    title="Connection failed"
-    {error}
-    on:close={() => (error = null)} />
 {/if}

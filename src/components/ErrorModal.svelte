@@ -3,6 +3,7 @@
 
   import { createEventDispatcher } from "svelte";
 
+  import * as modal from "@app/lib/modal";
   import Button from "@app/components/Button.svelte";
   import Modal from "@app/components/Modal.svelte";
 
@@ -43,7 +44,12 @@
 
   <span slot="actions">
     <slot name="actions">
-      <Button variant="negative" on:click={() => dispatch("close")}>
+      <Button
+        variant="negative"
+        on:click={() => {
+          modal.hide();
+          dispatch("close");
+        }}>
         {action}
       </Button>
     </slot>
