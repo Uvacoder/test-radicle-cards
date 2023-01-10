@@ -5,7 +5,7 @@
   import { get } from "svelte/store";
 
   import Button from "@app/components/Button.svelte";
-  import ConnectWallet from "@app/components/Connect/ConnectWallet.svelte";
+  import ConnectWalletModal from "@app/components/Connect/ConnectWalletModal.svelte";
   import ErrorModal from "@app/components/ErrorModal.svelte";
 
   import { Connection, state } from "@app/lib/session";
@@ -50,7 +50,7 @@
 </Button>
 
 {#if $walletConnectState.state === "open"}
-  <ConnectWallet
+  <ConnectWalletModal
     {wallet}
     uri={$walletConnectState.uri}
     on:close={onModalClose} />
