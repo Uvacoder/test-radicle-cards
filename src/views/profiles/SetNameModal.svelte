@@ -2,8 +2,7 @@
   import type { Wallet } from "@app/lib/wallet";
   import type { User } from "@app/lib/profile";
 
-  import { createEventDispatcher } from "svelte";
-
+  import * as modal from "@app/lib/modal";
   import * as router from "@app/lib/router";
   import Button from "@app/components/Button.svelte";
   import ErrorModal from "@app/components/ErrorModal.svelte";
@@ -11,8 +10,6 @@
   import Modal from "@app/components/Modal.svelte";
   import TextInput from "@app/components/TextInput.svelte";
   import { formatAddress, isAddressEqual, twemoji } from "@app/lib/utils";
-
-  const dispatch = createEventDispatcher<{ close: never }>();
 
   export let entity: User;
   export let wallet: Wallet;
@@ -75,7 +72,7 @@
 </style>
 
 {#if state === State.Success}
-  <Modal floating>
+  <Modal>
     <div slot="title" use:twemoji>✅</div>
 
     <div slot="subtitle">
@@ -85,13 +82,11 @@
     </div>
 
     <div slot="actions">
-      <Button variant="secondary" on:click={() => dispatch("close")}>
-        Done
-      </Button>
+      <Button variant="secondary" on:click={modal.hide}>Done</Button>
     </div>
   </Modal>
 {:else if state === State.Mismatch}
-  <ErrorModal floating title="🧣" on:close>
+  <ErrorModal title="🧣">
     The name <span class="txt-bold">{name}.{wallet.registrar.domain}</span>
     does not resolve to
     <span class="txt-bold">{entity.address}</span>
@@ -101,7 +96,8 @@
     <div slot="actions">
       <Button
         variant="negative"
-        on:click={() =>
+        on:click={() => {
+          modal.hide();
           router.push({
             resource: "registrations",
             params: {
@@ -110,18 +106,17 @@
                 params: { nameOrDomain: name, retry: false },
               },
             },
-          })}>
+          });
+        }}>
         Go to registration &rarr;
       </Button>
-      <Button variant="negative" on:click={() => dispatch("close")}>
-        Close
-      </Button>
+      <Button variant="negative" on:click={modal.hide}>Close</Button>
     </div>
   </ErrorModal>
 {:else if state === State.Failed && error}
-  <ErrorModal floating title="Transaction failed" message={error} on:close />
+  <ErrorModal title="Transaction failed" message={error} />
 {:else}
-  <Modal floating>
+  <Modal>
     <div slot="title">
       <div use:twemoji>🧣</div>
       <span>Associate profile</span>
@@ -164,21 +159,15 @@
 
     <div slot="actions" class="actions">
       {#if state === State.Signing}
-        <Button variant="secondary" on:click={() => dispatch("close")}>
-          Cancel
-        </Button>
+        <Button variant="secondary" on:click={modal.hide}>Cancel</Button>
       {:else if state === State.Pending}
-        <Button variant="secondary" on:click={() => dispatch("close")}>
-          Close
-        </Button>
+        <Button variant="secondary" on:click={modal.hide}>Close</Button>
       {:else}
         <Button variant="primary" on:click={onSubmit} disabled={!valid}>
           Submit
         </Button>
 
-        <Button variant="text" on:click={() => dispatch("close")}>
-          Cancel
-        </Button>
+        <Button variant="text" on:click={modal.hide}>Cancel</Button>
       {/if}
     </div>
   </Modal>
